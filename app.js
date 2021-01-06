@@ -39,16 +39,32 @@ const server = http.createServer((req, res) => {
       console.log(chunk);
       body.push(chunk);
     });
-    req.on("end", () => {
+    return req.on("end", () => {
       const parsedBody = Buffer.concat(body).toString();
       // to get message value of request body
       const message = parsedBody.split("=")[1];
       fs.writeFileSync("message.txt", message);
       console.log(parsedBody);
+
+      // Now you have written your code in callback, but the callback
+      // will always execute in future so if you have written something
+      // outside of this callback which we have written res.end(), it will
+      // end the response and you wont be able to redirect.
+      // [remove return of this event to reproduce]
+      // to avoid such issue return req.on() method so that statement
+      // after the event are not executed and once your callback executes
+      // you can redirect
+      res.statusCode = 302;
+      res.setHeader("location", "/");
+      res.end();
     });
 
-    res.statusCode = 302;
-    res.setHeader("location", "/");
+    // Notice: we have written res status and header outside of end callback.
+    // In this particular case we won't have problem as our response has nothing
+    // to do with parsedBody, its a simple redirect. but if your response depends on
+    // body you should write below statements in end callback
+    // res.statusCode = 302;
+    // res.setHeader("location", "/");
   }
 
   // if you omit following code, the client will be hung on the request as it never ends
