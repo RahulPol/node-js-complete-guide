@@ -1,9 +1,13 @@
 const http = require("http");
 // added express dependency
 const express = require("express");
+// to parse request body
+const bodyParser = require("body-parser");
 
 // to create request listener through express, we need to initialize it.
 const app = express();
+
+app.use(bodyParser.urlencoded());
 
 //Middleware - consider middleware as small pieces of code that your request goes through
 // before it is handled by final handler.
@@ -27,7 +31,26 @@ app.use((req, res, next) => {
 app.use("/add-product", (req, res, next) => {
   // since we are not calling next(), the next middleware won't be called
   // and the chain ends here.
-  res.send("<h1>The 'Add Product' page</h1>");
+  res.send(`
+    <html>
+      <head>
+        <title>Add Product</title>
+      </head>
+      <body>
+        <form action="/product" method="POST">
+            Product: <input name="productName" type="text" />
+            <button type="submit">Add Product</button>
+        </form>
+      </body>
+    </html>
+  `);
+});
+
+// you can omit next if you are not using it.
+app.use("/product", (req, res) => {
+  console.log(req.body);
+  // instead of using location, use redirect
+  res.redirect("/");
 });
 
 // handle root url request
