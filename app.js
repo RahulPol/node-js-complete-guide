@@ -13,14 +13,25 @@ const app = express();
 // following is a custom middleware that adds timestamp of when request received. Middleware takes
 // three argument req, res and next
 app.use((req, res, next) => {
-  console.log(new Date().toISOString());
+  console.log(
+    "Request arrived at: ",
+    new Date().toISOString() + "for path:",
+    req.url
+  );
   // next allows you to send request to next middleware
   next();
 });
 
-// just another middleware
-app.use((req, res, next) => {
-  console.log("I am in another middleware");
+// Note: always add specific route handlers above / handler as the code executes in top
+// to bottom way
+app.use("/add-product", (req, res, next) => {
+  // since we are not calling next(), the next middleware won't be called
+  // and the chain ends here.
+  res.send("<h1>The 'Add Product' page</h1>");
+});
+
+// handle root url request
+app.use("/", (req, res, next) => {
   res.send("<h1>Hello from Express!</h1>");
 });
 
