@@ -21,10 +21,14 @@ app.use((req, res, next) => {
 // just another middleware
 app.use((req, res, next) => {
   console.log("I am in another middleware");
-  next();
+  res.send("<h1>Hello from Express!</h1>");
 });
 
 // now pass that request listener to your server.
-const server = http.createServer(app);
+// const server = http.createServer(app);
+// server.listen("3000");
 
-server.listen("3000");
+// Or you can use listen method of express, it does exactly the same thing
+// just check here https://github.com/expressjs/express/blob/master/lib/application.js
+// and search from listen
+app.listen(3000);
