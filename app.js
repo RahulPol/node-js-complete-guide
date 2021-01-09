@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 // to create request listener through express, we need to initialize it.
 const app = express();
 
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 //Middleware - consider middleware as small pieces of code that your request goes through
 // before it is handled by final handler.
@@ -47,7 +47,8 @@ app.use("/add-product", (req, res, next) => {
 });
 
 // you can omit next if you are not using it.
-app.use("/product", (req, res) => {
+// to cater to specific http verb like post, you can use post instead of use
+app.post("/product", (req, res) => {
   console.log(req.body);
   // instead of using location, use redirect
   res.redirect("/");
