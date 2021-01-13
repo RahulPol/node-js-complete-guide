@@ -8,7 +8,8 @@ const router = express.Router();
 
 // handle root url request
 router.get("/", (req, res, next) => {
-  res.render("shop");
+  let products = adminData.products;
+  res.render("shop", { products, docTitle: "Shop" });
 });
 
 module.exports = router;
