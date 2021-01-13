@@ -8,8 +8,7 @@ const router = express.Router();
 
 // handle root url request
 router.get("/", (req, res, next) => {
-  console.log(adminData.products);
-  res.sendFile(path.join(rootDir, "views", "shop.html"));
+  res.render("shop");
 });
 
 module.exports = router;
