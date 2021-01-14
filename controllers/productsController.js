@@ -9,14 +9,26 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res) => {
   const product = new Product(req.body.title);
-  product.save();
-  res.redirect("/");
+  product
+    .save()
+    .then(() => {
+      res.redirect("/");
+    })
+    .catch((err) => {
+      res.status(500).redirect("/error");
+    });
 };
 
 exports.getProducts = (req, res, next) => {
-  res.render("shop", {
-    products: Product.fetchAll(),
-    docTitle: "Shop",
-    path: "/",
-  });
+  Product.fetchAll()
+    .then((products) => {
+      res.render("shop", {
+        products,
+        docTitle: "Shop",
+        path: "/",
+      });
+    })
+    .catch((err) => {
+      res.status(500).redirect("/error");
+    });
 };
