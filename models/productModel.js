@@ -36,14 +36,13 @@ class Product {
   }
 
   async save() {
-    return getProductsFromFile()
-      .then((products) => {
-        products.push(this);
-        return setProductsInFile(products);
-      })
-      .catch((err) => {
-        return err;
-      });
+    try {
+      const products = await getProductsFromFile();
+      products.push(this);
+      await setProductsInFile(products);
+    } catch (err) {
+      return err;
+    }
   }
 
   static fetchAll() {
