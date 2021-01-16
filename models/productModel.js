@@ -55,6 +55,11 @@ class Product {
   static fetchAll() {
     return getProductsFromFile();
   }
+
+  static async findProductById(id) {
+    const products = await getProductsFromFile();
+    return products.find((p) => p.id == id);
+  }
 }
 
 module.exports = Product;
