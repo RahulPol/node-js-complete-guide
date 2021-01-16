@@ -14,7 +14,6 @@ const getProductsFromFile = () => {
         reject(err);
         return;
       }
-      console.log(JSON.parse(content));
       resolve(content && content.length > 0 ? JSON.parse(content) : []);
     });
   });
@@ -42,6 +41,10 @@ class Product {
   async save() {
     try {
       const products = await getProductsFromFile();
+      this.id =
+        products.length === 0
+          ? 1
+          : Number(products[products.length - 1].id) + 1;
       products.push(this);
       await setProductsInFile(products);
     } catch (err) {
