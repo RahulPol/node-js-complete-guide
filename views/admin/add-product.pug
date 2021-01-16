@@ -10,4 +10,13 @@ block content
             div.form-control
                 label(for="title") Title
                 input(type="text", name="title")#title
+            div.form-control
+                label(for="imageURL") Image URL
+                input(type="text", name="imageURL")#imageURL
+            div.form-control
+                label(for="price") Price
+                input(type="number", name="price" step="0.01")#price
+            div.form-control
+                label(for="description") Description
+                textarea(name="description", cols="30", rows="5")#description
             button.btn(type="submit") Add Product            

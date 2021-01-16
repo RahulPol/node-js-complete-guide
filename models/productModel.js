@@ -14,6 +14,7 @@ const getProductsFromFile = () => {
         reject(err);
         return;
       }
+      console.log(JSON.parse(content));
       resolve(content && content.length > 0 ? JSON.parse(content) : []);
     });
   });
@@ -31,8 +32,11 @@ const setProductsInFile = (products) => {
   });
 };
 class Product {
-  constructor(title) {
+  constructor(title, imageURL, price, description) {
     this.title = title;
+    this.imageURL = imageURL;
+    this.price = price;
+    this.description = description;
   }
 
   async save() {
