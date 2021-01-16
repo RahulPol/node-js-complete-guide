@@ -16,11 +16,16 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const productId = req.params.productId;
-  console.log(productId);
-  Product.findProductById(productId).then((product) => {
-    console.log(product);
-    res.redirect("/products");
-  });
+  Product.findProductById(productId)
+    .then((product) => {
+      res.render("shop/product-detail", {
+        product: product,
+        docTitle: "Product Details",
+      });
+    })
+    .catch((err) => {
+      res.status(500).redirect("/error");
+    });
 };
 
 exports.getIndex = (req, res, next) => {
@@ -42,6 +47,12 @@ exports.getCart = (req, res, next) => {
     docTitle: "Your Cart",
     path: "/cart",
   });
+};
+
+exports.postCart = (req, res, next) => {
+  const productId = req.body.productId;
+  console.log(productId);
+  res.redirect("/cart");
 };
 
 exports.getOrders = (req, res, next) => {

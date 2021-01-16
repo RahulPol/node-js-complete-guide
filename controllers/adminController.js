@@ -24,7 +24,7 @@ exports.getAddProduct = (req, res, next) => {
 exports.postAddProduct = (req, res) => {
   const product = new Product(
     req.body.title,
-    req.body.imageURL,
+    "https://cdn.pixabay.com/photo/2016/03/31/20/51/book-1296045_960_720.png",
     req.body.price,
     req.body.description
   );
