@@ -15,7 +15,7 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getAddProduct = (req, res, next) => {
-  res.render("admin/add-product", {
+  res.render("admin/edit-product", {
     docTitle: "Add Product",
     path: "/admin/add-product",
   });
@@ -36,4 +36,16 @@ exports.postAddProduct = (req, res) => {
     .catch((err) => {
       res.status(500).redirect("/error");
     });
+};
+
+exports.getEditProduct = (req, res, next) => {
+  const editMode = req.query.edit;
+  if (!editMode) {
+    res.redirect("/");
+  }
+  res.render("admin/edit-product", {
+    docTitle: "Edit Product",
+    path: "/admin/edit-product",
+    editing: editMode,
+  });
 };
