@@ -1,3 +1,4 @@
+const { error } = require("console");
 const fs = require("fs");
 const path = require("path");
 
@@ -62,10 +63,13 @@ class Cart {
     try {
       const cart = await getCartFromFile();
       const product = cart.products.find((p) => p.id == productId);
-      cart.products = cart.products.filter((p) => p.id !== productId);
-      cart.totalPrice = cart.totalPrice - product.qty * productPrice;
+      if (product) {
+        cart.products = cart.products.filter((p) => p.id !== productId);
+        cart.totalPrice = cart.totalPrice - product.qty * productPrice;
 
-      return await setCartInFile(cart);
+        return await setCartInFile(cart);
+      }
+      return error("Product not available");
     } catch (err) {
       return err;
     }
