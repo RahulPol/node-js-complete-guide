@@ -1,2 +1,10 @@
 extends ../layouts/main-layout.pug
 
+block content
+    main
+        if cartProducts.length > 0
+            ul
+                each product in cartProducts
+                    li #{product.productData.title}  #{product.qty}
+        else
+            h1 No products in cart!

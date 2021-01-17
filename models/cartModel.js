@@ -70,6 +70,18 @@ class Cart {
       return err;
     }
   }
+
+  static async fetchCart() {
+    return getCartFromFile();
+    //     new Promise(async (resolve, reject) => {
+    //       const cart = await getCartFromFile();
+    //       if (cart) {
+    //         resolve(cart);
+    //         return;
+    //       }
+    //       resolve([]);
+    //     });
+  }
 }
 
 module.exports = Cart;
