@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const rootDirectory = require("../util/util");
+const Cart = require("./cartModel");
 
 const filePath = path.join(rootDirectory, "data/products.json");
 const products = [];
@@ -71,18 +72,18 @@ class Product {
     return new Promise(async (resolve, reject) => {
       try {
         let products = await getProductsFromFile();
-        products = products.filter((p) => p.id != productId);
-        // const existingProductIndex = products.findIndex(
-        //   (p) => p.id == productId
-        // );
-        // if (existingProductIndex !== -1) {
-        //   products.splice(existingProductIndex, 1);
-        // }
+        const product = products.find((p) => p.id == productId);
+        if (product) {
+          products = products.filter((p) => p.id != productId);
 
-        await setProductsInFile(products);
-        resolve();
+          await setProductsInFile(products);
+
+          await Cart.deleteProductFromCart(productId, product.price);
+          return resolve();
+        }
+        return reject("Product doesn't exist");
       } catch (err) {
-        reject(err);
+        return reject(err);
       }
     });
   }
