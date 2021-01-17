@@ -33,7 +33,7 @@ exports.postAddProduct = (req, res) => {
   product
     .save()
     .then(() => {
-      res.redirect("/");
+      res.redirect("/admin/products");
     })
     .catch((err) => {
       res.status(500).redirect("/error");
@@ -79,4 +79,15 @@ exports.postEditProduct = (req, res, next) => {
   updatedProduct.save().then(() => {
     res.redirect("/admin/products");
   });
+};
+
+exports.postDeleteProduct = (req, res, next) => {
+  const productId = req.body.productId;
+  Product.delete(productId)
+    .then(() => {
+      res.redirect("/admin/products");
+    })
+    .catch((err) => {
+      res.redirect("/error");
+    });
 };

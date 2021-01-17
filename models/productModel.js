@@ -66,6 +66,26 @@ class Product {
     const products = await getProductsFromFile();
     return products.find((p) => p.id == id);
   }
+
+  static delete(productId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let products = await getProductsFromFile();
+        products = products.filter((p) => p.id != productId);
+        // const existingProductIndex = products.findIndex(
+        //   (p) => p.id == productId
+        // );
+        // if (existingProductIndex !== -1) {
+        //   products.splice(existingProductIndex, 1);
+        // }
+
+        await setProductsInFile(products);
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 }
 
 module.exports = Product;
