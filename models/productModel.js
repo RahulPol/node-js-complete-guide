@@ -34,10 +34,21 @@ class Product {
     return getProductFromDatabase();
   }
 
-  static async findProductById(id) {
+  static findProductById(id) {
     try {
-      const products = await getProductFromDatabase();
-      return products.find((p) => p.id == id);
+      return new Promise((resolve, reject) => {
+        databaseConnection
+          .execute("SELECT * FROM products WHERE id = ?", [id])
+          .then(([rows, fieldData]) => {
+            if (rows.length == 1) {
+              return resolve(rows[0]);
+            }
+            return reject("Too many results");
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
     } catch (err) {
       return err;
     }
