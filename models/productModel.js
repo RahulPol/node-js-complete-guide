@@ -23,7 +23,12 @@ class Product {
     this.description = description;
   }
 
-  async save() {}
+  async save() {
+    return databaseConnection.execute(
+      "INSERT INTO products (title, price, description, imageURL) VALUES (?, ?, ?, ?)",
+      [this.title, this.price, this.description, this.imageURL]
+    );
+  }
 
   static fetchAll() {
     return getProductFromDatabase();

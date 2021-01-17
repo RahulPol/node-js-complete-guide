@@ -1,4 +1,4 @@
-const Product = require("../models/productModel_WithFiles");
+const Product = require("../models/productModel");
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll()
