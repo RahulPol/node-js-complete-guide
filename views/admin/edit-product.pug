@@ -6,7 +6,7 @@ block styles
 
 block content
     main
-        form.product-form(action="/admin/add-product", method="POST")
+        form.product-form(action=`${editing ? "/admin/edit-product" : "/admin/add-product" }`, method="POST")
             div.form-control
                 label(for="title") Title
                 input(type="text", name="title" value=`${editing ? product.title : ""}`)#title
@@ -19,5 +19,7 @@ block content
             div.form-control
                 label(for="description") Description
                 textarea(name="description", cols="30", rows="5")#description #{`${editing ? product.description : ""}`}
+            if editing 
+                input(type="hidden", name="productId" value=`${product.id}`)
             button.btn(type="submit")  #{`${editing ? "Edit" : "Add"}`} Product
             

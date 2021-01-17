@@ -24,6 +24,7 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res) => {
   const product = new Product(
+    null,
     req.body.title,
     "https://cdn.pixabay.com/photo/2016/03/31/20/51/book-1296045_960_720.png",
     req.body.price,
@@ -60,4 +61,22 @@ exports.getEditProduct = (req, res, next) => {
     .catch((err) => {
       res.redirect("/error");
     });
+};
+
+exports.postEditProduct = (req, res, next) => {
+  const productId = req.body.productId;
+  const updatedTitle = req.body.title;
+  const updatedPrice = req.body.price;
+  const updatedImageURL = req.body.imageURL;
+  const updatedDescription = req.body.description;
+  const updatedProduct = new Product(
+    productId,
+    updatedTitle,
+    updatedImageURL,
+    updatedPrice,
+    updatedDescription
+  );
+  updatedProduct.save().then(() => {
+    res.redirect("/admin/products");
+  });
 };

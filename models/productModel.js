@@ -31,7 +31,8 @@ const setProductsInFile = (products) => {
   });
 };
 class Product {
-  constructor(title, imageURL, price, description) {
+  constructor(id, title, imageURL, price, description) {
+    this.id = id;
     this.title = title;
     this.imageURL = imageURL;
     this.price = price;
@@ -41,11 +42,16 @@ class Product {
   async save() {
     try {
       const products = await getProductsFromFile();
-      this.id =
-        products.length === 0
-          ? 1
-          : Number(products[products.length - 1].id) + 1;
-      products.push(this);
+      if (this.id !== null) {
+        const existingProductIndex = products.findIndex((p) => p.id == this.id);
+        products[existingProductIndex] = this;
+      } else {
+        this.id =
+          products.length === 0
+            ? 1
+            : Number(products[products.length - 1].id) + 1;
+        products.push(this);
+      }
       await setProductsInFile(products);
     } catch (err) {
       return err;
