@@ -65,7 +65,7 @@ class Cart {
       cart.products = cart.products.filter((p) => p.id !== productId);
       cart.totalPrice = cart.totalPrice - product.qty * productPrice;
 
-      await setCartInFile(cart);
+      return await setCartInFile(cart);
     } catch (err) {
       return err;
     }
