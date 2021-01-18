@@ -1,12 +1,12 @@
 const Product = require("../models/productModel");
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
+  Product.findAll()
     .then((products) => {
       res.render("admin/products", {
         products,
         docTitle: "Admin Products",
-        path: "admin/products",
+        path: "/admin/products",
       });
     })
     .catch((err) => {
@@ -23,19 +23,26 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.postAddProduct = (req, res) => {
-  const product = new Product(
-    null,
-    req.body.title,
-    "https://cdn.pixabay.com/photo/2016/03/31/20/51/book-1296045_960_720.png",
-    req.body.price,
-    req.body.description
-  );
-  product
-    .save()
+  const title = req.body.title;
+  const imageUrl =
+    "https://cdn.pixabay.com/photo/2016/03/31/20/51/book-1296045_960_720.png";
+  const price = req.body.price;
+  const description = req.body.description;
+
+  // Product.create({
+  //   title: product.title
+  // })
+  Product.create({
+    title: title,
+    imageUrl: imageUrl,
+    price: price,
+    description: description,
+  })
     .then(() => {
       res.redirect("/admin/products");
     })
     .catch((err) => {
+      console.log(err);
       res.status(500).redirect("/error");
     });
 };
