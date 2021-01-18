@@ -7,9 +7,10 @@ const adminRoutes = require("./routes/adminRoutes.js");
 const shopRoutes = require("./routes/shopRoutes.js");
 const errorController = require("./controllers/errorController");
 const sequelize = require("./util/database");
-const ProductModel = require("./models/ProductModel");
-const UserModel = require("./models/UserModel");
 const Product = require("./models/ProductModel");
+const User = require("./models/UserModel");
+const Cart = require("./models/cartModel");
+const CartItem = require("./models/cartItemModel.js");
 
 const app = express();
 app.set("view engine", "pug");
@@ -18,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  UserModel.findByPk(1)
+  User.findByPk(1)
     .then((user) => {
       req.user = user;
       next();
@@ -33,23 +34,26 @@ app.use(shopRoutes);
 app.use("/error", errorController.getError);
 app.use(errorController.get404);
 
-ProductModel.belongsTo(UserModel, { constraints: true, onDelete: "CASCADE" });
-UserModel.hasMany(ProductModel);
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
 
 sequelize
   // .sync({ force: true })
   .sync()
   .then((result) => {
-    return UserModel.findByPk(1);
+    return User.findByPk(1);
   })
   .then((user) => {
     if (!user) {
-      UserModel.create({ name: "Rahul Pol", email: "polrahul10@gmail.com" });
+      User.create({ name: "Rahul Pol", email: "polrahul10@gmail.com" });
     }
     return Promise.resolve(user);
   })
   .then((user) => {
-    console.log(user);
     app.listen(3000);
   })
   .catch((err) => {
