@@ -1,7 +1,9 @@
 const Product = require("../models/productModel");
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  req.user
+    .getProducts({})
+    //Product.findAll()
     .then((products) => {
       res.render("admin/products", {
         products,
@@ -51,8 +53,12 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect("/");
   }
   const productId = req.params.productId;
-  Product.findByPk(productId)
-    .then((product) => {
+
+  req.user
+    .getProducts({ where: { id: productId } })
+    // Product.findByPk(productId)
+    .then((products) => {
+      const product = products[0];
       if (!product) {
         return res.redirect("/");
       }
