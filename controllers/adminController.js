@@ -53,7 +53,7 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect("/");
   }
   const productId = req.params.productId;
-  Product.findProductById(productId)
+  Product.findByPk(productId)
     .then((product) => {
       if (!product) {
         return res.redirect("/");
@@ -74,12 +74,12 @@ exports.postEditProduct = (req, res, next) => {
   const productId = req.body.productId;
   const updatedTitle = req.body.title;
   const updatedPrice = req.body.price;
-  const updatedImageURL = req.body.imageURL;
+  const updatedImageUrl = req.body.imageUrl;
   const updatedDescription = req.body.description;
   const updatedProduct = new Product(
     productId,
     updatedTitle,
-    updatedImageURL,
+    updatedImageUrl,
     updatedPrice,
     updatedDescription
   );

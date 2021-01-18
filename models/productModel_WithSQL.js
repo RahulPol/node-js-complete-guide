@@ -15,18 +15,18 @@ const getProductFromDatabase = () => {
 };
 
 class Product {
-  constructor(id, title, imageURL, price, description) {
+  constructor(id, title, imageUrl, price, description) {
     this.id = id;
     this.title = title;
-    this.imageURL = imageURL;
+    this.imageUrl = imageUrl;
     this.price = price;
     this.description = description;
   }
 
   async save() {
     return databaseConnection.execute(
-      "INSERT INTO products (title, price, description, imageURL) VALUES (?, ?, ?, ?)",
-      [this.title, this.price, this.description, this.imageURL]
+      "INSERT INTO products (title, price, description, imageUrl) VALUES (?, ?, ?, ?)",
+      [this.title, this.price, this.description, this.imageUrl]
     );
   }
 

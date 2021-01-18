@@ -33,10 +33,10 @@ const setProductsInFile = (products) => {
   });
 };
 class Product {
-  constructor(id, title, imageURL, price, description) {
+  constructor(id, title, imageUrl, price, description) {
     this.id = id;
     this.title = title;
-    this.imageURL = imageURL;
+    this.imageUrl = imageUrl;
     this.price = price;
     this.description = description;
   }
