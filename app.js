@@ -17,6 +17,17 @@ app.set("view engine", "pug");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use((req, res, next) => {
+  UserModel.findByPk(1)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      res.redirect("/error");
+    });
+});
+
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use("/error", errorController.getError);
@@ -26,9 +37,19 @@ ProductModel.belongsTo(UserModel, { constraints: true, onDelete: "CASCADE" });
 UserModel.hasMany(ProductModel);
 
 sequelize
-  .sync({ force: true })
+  // .sync({ force: true })
+  .sync()
   .then((result) => {
-    // console.log(result);
+    return UserModel.findByPk(1);
+  })
+  .then((user) => {
+    if (!user) {
+      UserModel.create({ name: "Rahul Pol", email: "polrahul10@gmail.com" });
+    }
+    return Promise.resolve(user);
+  })
+  .then((user) => {
+    console.log(user);
     app.listen(3000);
   })
   .catch((err) => {
