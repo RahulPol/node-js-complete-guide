@@ -76,25 +76,40 @@ exports.postEditProduct = (req, res, next) => {
   const updatedPrice = req.body.price;
   const updatedImageUrl = req.body.imageUrl;
   const updatedDescription = req.body.description;
-  const updatedProduct = new Product(
-    productId,
-    updatedTitle,
-    updatedImageUrl,
-    updatedPrice,
-    updatedDescription
-  );
-  updatedProduct.save().then(() => {
-    res.redirect("/admin/products");
-  });
-};
 
-exports.postDeleteProduct = (req, res, next) => {
-  const productId = req.body.productId;
-  Product.delete(productId)
-    .then(() => {
+  Product.findByPk(productId)
+    .then((product) => {
+      product.title = updatedTitle;
+      product.imageUrl = updatedImageUrl;
+      product.price = updatedPrice;
+      product.description = updatedDescription;
+      return product.save();
+    })
+    .then((result) => {
       res.redirect("/admin/products");
     })
     .catch((err) => {
       res.redirect("/error");
     });
+};
+
+exports.postDeleteProduct = (req, res, next) => {
+  const productId = req.body.productId;
+  Product.findByPk(productId)
+    .then((product) => {
+      return product.destroy();
+    })
+    .then((result) => {
+      res.redirect("/admin/products");
+    })
+    .catch((err) => {
+      res.redirect("/error");
+    });
+  // Product.delete(productId)
+  //   .then(() => {
+  //     res.redirect("/admin/products");
+  //   })
+  //   .catch((err) => {
+  //     res.redirect("/error");
+  //   });
 };
