@@ -45,24 +45,44 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = async (req, res, next) => {
-  try {
-    const cart = await Cart.fetchCart();
-    const products = await Product.fetchAll();
-    const cartProducts = [];
-    for (product of products) {
-      const prod = cart.products.find((p) => p.id == product.id);
-      if (prod) {
-        cartProducts.push({ productData: product, qty: prod.qty });
-      }
-    }
-    res.render("shop/cart", {
-      cartProducts,
-      docTitle: "Your Cart",
-      path: "/cart",
+  req.user
+    .getCart()
+    .then((cart) => {
+      console.log(cart);
+      cart
+        .getProducts()
+        .then((products) => {
+          res.render("shop/cart", {
+            cartProducts: products,
+            docTitle: "Your Cart",
+            path: "/cart",
+          });
+        })
+        .catch((err) => {
+          res.redirect("/errror");
+        });
+    })
+    .catch((err) => {
+      res.redirect("/error");
     });
-  } catch (error) {
-    res.status(500).redirect("/error");
-  }
+  // try {
+  //   const cart = await Cart.fetchCart();
+  //   const products = await Product.fetchAll();
+  //   const cartProducts = [];
+  //   for (product of products) {
+  //     const prod = cart.products.find((p) => p.id == product.id);
+  //     if (prod) {
+  //       cartProducts.push({ productData: product, qty: prod.qty });
+  //     }
+  //   }
+  //   res.render("shop/cart", {
+  //     cartProducts,
+  //     docTitle: "Your Cart",
+  //     path: "/cart",
+  //   });
+  // } catch (error) {
+  //   res.status(500).redirect("/error");
+  // }
 };
 
 exports.postCart = (req, res, next) => {
