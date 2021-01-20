@@ -56,7 +56,7 @@ exports.getEditProduct = (req, res, next) => {
 
   req.user
     .getProducts({ where: { id: productId } })
-    // Product.findByPk(productId)
+    // Product.findById(productId)
     .then((products) => {
       const product = products[0];
       if (!product) {
@@ -81,7 +81,7 @@ exports.postEditProduct = (req, res, next) => {
   const updatedImageUrl = req.body.imageUrl;
   const updatedDescription = req.body.description;
 
-  Product.findByPk(productId)
+  Product.findById(productId)
     .then((product) => {
       product.title = updatedTitle;
       product.imageUrl = updatedImageUrl;
@@ -99,7 +99,7 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const productId = req.body.productId;
-  Product.findByPk(productId)
+  Product.findById(productId)
     .then((product) => {
       return product.destroy();
     })
